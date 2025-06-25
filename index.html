@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Business Plan Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Homepage -->
+        <div id="homepage" class="page active">
+            <div class="container">
+                <header class="hero-section">
+                    <h1>AI-Powered Business Plan Generator</h1>
+                    <p class="hero-subtitle">Create professional business plans in minutes with AI assistance</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">🚀</div>
+                            <h3>AI-Powered Suggestions</h3>
+                            <p>Get intelligent recommendations for every section of your business plan</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <h3>Financial Projections</h3>
+                            <p>Automated charts and financial modeling with visual diagrams</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📄</div>
+                            <h3>Professional Export</h3>
+                            <p>Export to PDF, create pitch decks, and share with investors</p>
+                        </div>
+                    </div>
+                    <div class="hero-cta">
+                        <button class="btn btn--primary btn--lg" id="startNewPlan">Start New Business Plan</button>
+                        <button class="btn btn--outline btn--lg" id="loadSavedPlan">Load Saved Plan</button>
+                    </div>
+                </header>
+            </div>
+        </div>
+
+        <!-- Wizard Interface -->
+        <div id="wizard" class="page">
+            <div class="wizard-container">
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <!-- Step Counter -->
+                <div class="step-counter">
+                    <span id="currentStep">1</span> of <span id="totalSteps">8</span>
+                </div>
+
+                <!-- Navigation Breadcrumbs -->
+                <nav class="breadcrumb-nav">
+                    <ul id="breadcrumbs"></ul>
+                </nav>
+
+                <!-- Wizard Content -->
+                <div class="wizard-content">
+                    <!-- Step 0: Business Type Selection -->
+                    <div class="wizard-step" id="step-0">
+                        <div class="step-header">
+                            <h2>Choose Your Business Type</h2>
+                            <p>Select the category that best describes your business</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Business Type</label>
+                            <select class="form-control" id="businessType" required>
+                                <option value="">Select your business type...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Industry</label>
+                            <select class="form-control" id="industry" required>
+                                <option value="">Select your industry...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Business Overview -->
+                    <div class="wizard-step" id="step-1">
+                        <div class="step-header">
+                            <h2>Business Overview</h2>
+                            <p>Define your company's core identity and mission</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="companyName" placeholder="Enter your company name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Business Description</label>
+                            <textarea class="form-control" id="businessDescription" rows="4" placeholder="Describe what your business does..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Mission Statement</label>
+                            <textarea class="form-control" id="mission" rows="3" placeholder="What is your company's mission?"></textarea>
+                            <div class="ai-suggestion" id="missionSuggestion"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Vision Statement</label>
+                            <textarea class="form-control" id="vision" rows="3" placeholder="What is your long-term vision?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Market Analysis -->
+                    <div class="wizard-step" id="step-2">
+                        <div class="step-header">
+                            <h2>Market Analysis</h2>
+                            <p>Research your target market and competition</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Target Market</label>
+                            <textarea class="form-control" id="targetMarket" rows="4" placeholder="Describe your ideal customers..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Market Size (Estimated)</label>
+                            <input type="text" class="form-control" id="marketSize" placeholder="e.g., $10 billion TAM">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Key Competitors</label>
+                            <textarea class="form-control" id="competitors" rows="3" placeholder="List your main competitors..."></textarea>
+                            <div class="ai-suggestion" id="competitorSuggestion"></div>
+                        </div>
+                        
+                        <div class="market-research-results">
+                            <h4>AI Market Research</h4>
+                            <div id="marketInsights" class="market-insights"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Products & Services -->
+                    <div class="wizard-step" id="step-3">
+                        <div class="step-header">
+                            <h2>Products & Services</h2>
+                            <p>Detail your offerings and value proposition</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Product/Service Description</label>
+                            <textarea class="form-control" id="productDescription" rows="4" placeholder="Describe your products or services..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Unique Value Proposition</label>
+                            <textarea class="form-control" id="valueProposition" rows="3" placeholder="What makes you different from competitors?"></textarea>
+                            <div class="ai-suggestion" id="valuePropSuggestion"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pricing Strategy</label>
+                            <select class="form-control" id="pricingStrategy">
+                                <option value="">Select pricing strategy...</option>
+                                <option value="premium">Premium Pricing</option>
+                                <option value="competitive">Competitive Pricing</option>
+                                <option value="penetration">Penetration Pricing</option>
+                                <option value="value-based">Value-Based Pricing</option>
+                                <option value="subscription">Subscription Model</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Marketing Strategy -->
+                    <div class="wizard-step" id="step-4">
+                        <div class="step-header">
+                            <h2>Marketing Strategy</h2>
+                            <p>Plan how you'll reach and acquire customers</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Customer Acquisition Strategy</label>
+                            <textarea class="form-control" id="customerAcquisition" rows="4" placeholder="How will you attract and acquire customers?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Marketing Channels</label>
+                            <div class="checkbox-group" id="marketingChannels"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Marketing Budget (Monthly)</label>
+                            <input type="number" class="form-control" id="marketingBudget" placeholder="Enter monthly marketing budget">
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Operations Plan -->
+                    <div class="wizard-step" id="step-5">
+                        <div class="step-header">
+                            <h2>Operations Plan</h2>
+                            <p>Outline how your business will operate</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Business Model</label>
+                            <select class="form-control" id="businessModel">
+                                <option value="">Select business model...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Team Structure</label>
+                            <textarea class="form-control" id="teamStructure" rows="4" placeholder="Describe your current and planned team structure..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Key Operations</label>
+                            <textarea class="form-control" id="keyOperations" rows="4" placeholder="Describe your main operational processes..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Financial Projections -->
+                    <div class="wizard-step" id="step-6">
+                        <div class="step-header">
+                            <h2>Financial Projections</h2>
+                            <p>Project your revenue, expenses, and funding needs</p>
+                        </div>
+                        
+                        <div class="financial-inputs">
+                            <div class="form-group">
+                                <label class="form-label">Year 1 Revenue Target</label>
+                                <input type="number" class="form-control" id="year1Revenue" placeholder="Expected revenue in year 1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Monthly Operating Expenses</label>
+                                <input type="number" class="form-control" id="monthlyExpenses" placeholder="Monthly operating costs">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Startup Costs</label>
+                                <input type="number" class="form-control" id="startupCosts" placeholder="Initial investment needed">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Funding Required</label>
+                                <input type="number" class="form-control" id="fundingRequired" placeholder="Total funding needed">
+                            </div>
+                        </div>
+                        
+                        <div class="financial-charts">
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="expenseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Risk Analysis -->
+                    <div class="wizard-step" id="step-7">
+                        <div class="step-header">
+                            <h2>Risk Analysis</h2>
+                            <p>Identify potential risks and mitigation strategies</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Market Risks</label>
+                            <textarea class="form-control" id="marketRisks" rows="3" placeholder="What market-related risks might affect your business?"></textarea>
+                            <div class="ai-suggestion" id="riskSuggestion"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Operational Risks</label>
+                            <textarea class="form-control" id="operationalRisks" rows="3" placeholder="What operational challenges might you face?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Mitigation Strategies</label>
+                            <textarea class="form-control" id="mitigationStrategies" rows="4" placeholder="How will you address these risks?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 8: Implementation Timeline -->
+                    <div class="wizard-step" id="step-8">
+                        <div class="step-header">
+                            <h2>Implementation Timeline</h2>
+                            <p>Set milestones and key objectives</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">6-Month Milestones</label>
+                            <textarea class="form-control" id="sixMonthMilestones" rows="4" placeholder="What do you want to achieve in the first 6 months?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">1-Year Goals</label>
+                            <textarea class="form-control" id="oneYearGoals" rows="4" placeholder="What are your goals for the first year?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Success Metrics</label>
+                            <textarea class="form-control" id="successMetrics" rows="3" placeholder="How will you measure success?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="wizard-navigation">
+                    <button class="btn btn--outline" id="prevBtn" disabled>Previous</button>
+                    <button class="btn btn--secondary" id="saveBtn">Save Draft</button>
+                    <button class="btn btn--primary" id="nextBtn">Next</button>
+                    <button class="btn btn--primary" id="finishBtn" style="display: none;">Complete Plan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Plan Preview -->
+        <div id="preview" class="page">
+            <div class="container">
+                <div class="preview-header">
+                    <h2>Business Plan Preview</h2>
+                    <div class="preview-actions">
+                        <button class="btn btn--outline" id="editPlanBtn">Edit Plan</button>
+                        <button class="btn btn--secondary" id="downloadPdfBtn">Download PDF</button>
+                        <button class="btn btn--primary" id="createPitchDeckBtn">Create Pitch Deck</button>
+                    </div>
+                </div>
+                
+                <div class="business-plan-document" id="businessPlanDocument">
+                    <!-- Business plan content will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Chat -->
+        <div class="ai-assistant" id="aiAssistant">
+            <div class="ai-bubble">
+                <span>💡</span>
+                <div class="ai-tooltip">AI Assistant</div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>Generating AI suggestions...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
